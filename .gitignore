@@ -1,0 +1,97 @@
+# macOS and filesystem metadata
+.DS_Store
+._*
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Python environments and packaging
+.venv/
+venv/
+env/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# IDE and editor state
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Local secrets and machine-specific configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Temporary and runtime files
+.tmp/
+tmp/
+*.tmp
+*.log
+*.pid
+
+# Compressed archives
+*.zip
+*.7z
+*.rar
+*.tar
+*.tar.gz
+*.tgz
+*.tar.bz2
+*.tbz2
+*.tar.xz
+*.txz
+*.gz
+*.bz2
+*.xz
+*.zst
+
+# Research repository upload allowlist
+#
+# The workspace contains nearly 1 GB of datasets, model responses, audit logs,
+# and derived experimental artifacts. Ignore those by default, while retaining
+# executable source code and the small prompt/schema/dependency files required
+# to understand and reproduce the pipeline.
+research/**
+
+# Git must be allowed to traverse ignored subdirectories before individual
+# source files can be re-included.
+!research/**/
+
+# Executable source and tests
+!research/**/*.py
+!research/**/*.sh
+!research/**/*.sql
+
+# Dependency and build configuration
+!research/**/requirements*.txt
+!research/**/pyproject.toml
+!research/**/*.toml
+!research/**/*.yaml
+!research/**/*.yml
+
+# Model interfaces required by the executable pipeline
+!research/**/*.schema.json
+!research/**/*prompt*.txt
+!research/**/*PROMPT*.txt
+
+# Source-oriented documentation, when present
+!research/**/README.md
+!research/**/README*.md
+
+# External local dataset snapshot. Research manifests and derived evidence under
+# research/ remain trackable; the separately acquired corpus is intentionally not.
+OSSGameBench/

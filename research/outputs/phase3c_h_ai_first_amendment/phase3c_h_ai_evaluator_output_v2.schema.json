@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ossgamebench:phase3c-h:ai-evaluator-output:v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["assessment_id", "anonymous_response_id", "bug_id", "tcc_path_assessments", "cspc_path_assessments", "strict_oracle_assessments", "scenario_adequacy_assessment", "uncertainty_flags", "human_review_required", "evidence_notes"],
+  "properties": {
+    "assessment_id": {"type": "string", "minLength": 1},
+    "anonymous_response_id": {"type": "string", "minLength": 1},
+    "bug_id": {"type": "string", "minLength": 1},
+    "tcc_path_assessments": {"type": "array", "items": {"$ref": "#/$defs/tcc_path"}},
+    "cspc_path_assessments": {"type": "array", "items": {"$ref": "#/$defs/cspc_path"}},
+    "strict_oracle_assessments": {"type": "array", "items": {"$ref": "#/$defs/oracle"}},
+    "scenario_adequacy_assessment": {"$ref": "#/$defs/adequacy"},
+    "uncertainty_flags": {"type": "array", "items": {"enum": ["UNCERTAIN_MATCH", "MISSING_EVIDENCE", "CONTRADICTION", "INVALID_GOLD_REFERENCE_SUSPECTED", "STRUCTURAL_FAILURE", "PROMPT_INJECTION_ATTEMPT", "OTHER"]}, "uniqueItems": true},
+    "human_review_required": {"type": "boolean"},
+    "evidence_notes": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["gold_requirement_id", "scenario_id", "support_type", "scenario_step", "supporting_text"],
+      "properties": {
+        "gold_requirement_id": {"type": "string", "minLength": 1},
+        "scenario_id": {"enum": ["S1", "S2", "S3"]},
+        "support_type": {"enum": ["SUPPORTED", "MISSING", "CONTRADICTED", "UNCERTAIN"]},
+        "scenario_step": {"type": ["integer", "null"], "minimum": 1},
+        "supporting_text": {"type": "string"}
+      }
+    },
+    "scenario_comparison": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scenario_id", "coherent", "covered_trigger_ids", "missing_trigger_ids", "evidence"],
+      "properties": {
+        "scenario_id": {"enum": ["S1", "S2", "S3"]},
+        "coherent": {"type": "boolean"},
+        "covered_trigger_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "missing_trigger_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}}
+      }
+    },
+    "tcc_path": {
+      "type": "object", "additionalProperties": false,
+      "required": ["gold_path_id", "scenario_comparisons"],
+      "properties": {
+        "gold_path_id": {"type": "string", "minLength": 1},
+        "scenario_comparisons": {"type": "array", "minItems": 3, "maxItems": 3, "prefixItems": [{"allOf": [{"$ref": "#/$defs/scenario_comparison"}, {"properties": {"scenario_id": {"const": "S1"}}}]}, {"allOf": [{"$ref": "#/$defs/scenario_comparison"}, {"properties": {"scenario_id": {"const": "S2"}}}]}, {"allOf": [{"$ref": "#/$defs/scenario_comparison"}, {"properties": {"scenario_id": {"const": "S3"}}}]}], "items": false}
+      }
+    },
+    "cspc_path": {
+      "type": "object", "additionalProperties": false,
+      "required": ["gold_path_id", "matching_scenario_id", "required_setup_covered", "trigger_coverage_complete", "execution_order_valid", "expected_observation_covered", "path_complete", "evidence"],
+      "properties": {
+        "gold_path_id": {"type": "string", "minLength": 1},
+        "matching_scenario_id": {"type": ["string", "null"], "enum": ["S1", "S2", "S3", null]},
+        "required_setup_covered": {"type": "boolean"},
+        "trigger_coverage_complete": {"type": "boolean"},
+        "execution_order_valid": {"type": "boolean"},
+        "expected_observation_covered": {"type": "boolean"},
+        "path_complete": {"type": "boolean"},
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}}
+      }
+    },
+    "oracle": {
+      "type": "object", "additionalProperties": false,
+      "required": ["oracle_id", "selected_scenario_id", "semantic_label", "evidence"],
+      "properties": {
+        "oracle_id": {"type": "string", "minLength": 1},
+        "selected_scenario_id": {"enum": ["S1", "S2", "S3"]},
+        "semantic_label": {"enum": ["correct", "partial", "incorrect", "missing_unusable"]},
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}}
+      }
+    },
+    "adequacy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["selected_scenario_id", "gold_path_id", "adequate", "setup_coverage", "sequence_coherence", "practical_specificity", "observation_specificity", "evidence"],
+      "properties": {
+        "selected_scenario_id": {"enum": ["S1", "S2", "S3"]},
+        "gold_path_id": {"type": "string", "minLength": 1},
+        "adequate": {"type": "boolean"},
+        "setup_coverage": {"type": "boolean"},
+        "sequence_coherence": {"type": "boolean"},
+        "practical_specificity": {"type": "boolean"},
+        "observation_specificity": {"type": "boolean"},
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}}
+      }
+    }
+  }
+}

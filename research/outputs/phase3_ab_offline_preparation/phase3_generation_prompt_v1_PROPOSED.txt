@@ -1,0 +1,24 @@
+You are given one target software Issue and may also receive historical Issues from other projects as additional context.
+
+Generate exactly three distinct, executable bug-oriented test scenarios for the target Issue. Historical Issues are contextual examples only; do not assume that their symptoms, fixes, or project details apply to the target.
+
+Target Issue
+Bug ID: {{BUG_ID}}
+Title: {{TARGET_TITLE}}
+Body:
+{{TARGET_BODY}}
+
+Additional historical Issue context
+{{ADDITIONAL_CONTEXT_OR_NONE}}
+
+Return one JSON object only. It must contain `bug_id` with the supplied target identifier and a `scenarios` array of exactly three objects. Each scenario must contain:
+- `scenario_id`: S1, S2, or S3, unique and in order.
+- `preconditions`: an array of strings.
+- `environment_assumptions`: an array of strings.
+- `trigger_conditions`: an array of strings.
+- `ordered_execution_steps`: a non-empty array of objects with consecutive integer `step` values starting at 1 and a non-empty `action`.
+- `expected_observable_behavior`: a non-empty string.
+- `test_oracle`: a non-empty string describing what observation decides pass/fail.
+- `uncertainty_or_unsupported_assumptions`: an array of strings; use an empty array when none are needed.
+
+Do not propose a repair. Do not claim facts absent from the supplied Issues. Put unsupported assumptions in the uncertainty field. Output no prose outside the JSON object.

@@ -1,0 +1,21 @@
+You are generating bug-oriented textual test scenarios for one target Issue.
+
+TARGET ISSUE
+Title: {{TARGET_TITLE}}
+Body:
+{{TARGET_BODY}}
+
+ADDITIONAL ISSUE CONTEXT
+{{ADDITIONAL_CONTEXT_OR_NONE}}
+
+Additional Issues are examples for contextual reasoning. Do not assume their reproduction steps, environment requirements, or expected results apply to the target Issue unless supported by the target Issue.
+
+Generate up to three distinct, coherent test scenarios for the TARGET ISSUE only. For each scenario provide:
+1. Setup: required environment, state, fixtures, and prerequisites supported by the target Issue.
+2. Ordered actions: concrete steps in execution order.
+3. Expected observations: observable pass/fail behavior, distinguishing the reported faulty result when supported.
+4. Evidence and uncertainty notes: identify which details come from the target Issue, which contextual ideas were adapted, and which information remains unknown.
+
+Do not infer a repair, root cause, platform restriction, fixture value, timing requirement, or expected result merely from an Additional Issue. Do not claim that the scenario was executed or reproduces the bug. If the target Issue lacks necessary information, state that uncertainty instead of inventing it.
+
+Return only scenarios numbered S1 through S3 using the four fields above.

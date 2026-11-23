@@ -1,0 +1,30 @@
+You are given one target software Issue and may also receive historical Issues from other projects as additional context.
+
+Generate exactly three bug-oriented test scenarios for the target Issue. Each scenario must be a self-contained test procedure and must not depend on executing either of the other scenarios. The scenarios may explore different supported trigger conditions, environments, action sequences, boundary cases, or failure manifestations. They do not need to assume three different root causes.
+
+Historical Issues are contextual examples only. Do not assume their symptoms, fixes, APIs, configuration, or project details apply to the target.
+
+Target Issue
+Bug ID: {{BUG_ID}}
+Title: {{TARGET_TITLE}}
+Body:
+{{TARGET_BODY}}
+
+Additional historical Issue context
+{{ADDITIONAL_CONTEXT_OR_NONE}}
+
+Return one JSON object only. It must contain `bug_id` with the supplied target identifier and a `scenarios` array of exactly three objects, in order S1, S2, S3. Each scenario must contain:
+- `scenario_id`: S1, S2, or S3.
+- `preconditions`: an array of strings describing concrete supported setup; it may be empty when unknown.
+- `environment_assumptions`: an array of strings; it may be empty when unknown.
+- `trigger_conditions`: an array of evidence-grounded trigger strings.
+- `ordered_execution_steps`: a non-empty array of objects with consecutive integer `step` values starting at 1 and a non-empty `action`.
+- `expected_observable_behavior`: a non-empty, evidence-grounded observable result.
+- `test_oracle`: a non-empty pass/fail decision rule supported by the supplied target Issue.
+- `uncertainty_or_unsupported_assumptions`: an array of strings identifying necessary unknowns, how each affects execution, and missing prerequisites; use an empty array only when none are needed.
+
+Every scenario should provide a concrete setup, an actionable trigger, an ordered procedure, an observable result, and a pass/fail decision rule. When the Issue lacks enough information for a fully executable scenario, give the most specific evidence-grounded procedure possible and explicitly identify the missing prerequisites. Do not fabricate details merely to fill three scenarios.
+
+Do not invent a software version, configuration value, file path, error message, reproduction outcome, bug fix, or project-specific API unless it is supported by the supplied target Issue. Do not transfer those details from historical context to the target. When a necessary detail is unknown, state it as an assumption, explain its effect on execution, and do not present it as verified. Never turn an unsupported assumption into a fabricated Oracle.
+
+Do not propose a repair. Do not claim that a scenario reproduced the bug. Output no Markdown fence and no prose outside the JSON object.

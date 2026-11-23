@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ossgamebench:phase3c:human-review-record:proposed",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["anonymous_response_id", "bug_id", "scenario_id", "gold_path_id", "covered_trigger_condition_ids", "missing_trigger_condition_ids", "cspc_decision", "oracle_decision", "scenario_adequacy_decision", "evidence_based_justification", "reviewer_id", "review_timestamp_utc", "adjudication_status", "final_locked"],
+  "properties": {
+    "anonymous_response_id": {"type": "string", "minLength": 1},
+    "bug_id": {"type": "string", "minLength": 1},
+    "scenario_id": {"enum": ["S1", "S2", "S3"]},
+    "gold_path_id": {"type": "string", "minLength": 1},
+    "covered_trigger_condition_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "missing_trigger_condition_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "cspc_decision": {"enum": [0, 1, "NA"]},
+    "oracle_decision": {"enum": ["correct", "partial", "incorrect", "not_scorable", "NA"]},
+    "scenario_adequacy_decision": {"enum": [0, 1]},
+    "evidence_based_justification": {"type": "string", "minLength": 1},
+    "reviewer_id": {"type": "string", "minLength": 1},
+    "review_timestamp_utc": {"type": "string", "format": "date-time"},
+    "adjudication_status": {"enum": ["INITIAL_LOCKED", "AGREEMENT", "DISAGREEMENT_PENDING", "ADJUDICATED"]},
+    "final_locked": {"type": "boolean"}
+  }
+}
